@@ -1,0 +1,45 @@
+services:
+  mysql-container:
+    image: mysql:5.7
+    env_file:
+      - .env
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+    networks:
+      - devnet
+
+  phpmyadmin-container:
+    build: ./docker/phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql-container
+      PMA_USER: ${MYSQL_USER}
+      PMA_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      - devnet
+    depends_on:
+      - mysql-container
+
+  apache-php-container:
+    build: ./docker/apache-php
+    env_file:
+      - .env
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www/html
+    networks:
+      - devnet
+    depends_on:
+      - mysql-container
+
+networks:
+  devnet:
+    driver: bridge
+
+volumes:
+  mysql_data:

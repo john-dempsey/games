@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Library - V2</title>
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/games.css">
+    <link rel="stylesheet" href="css/dialogs.css">
+    <link rel="stylesheet" href="css/forms.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Page Header -->
+        <header class="page-header">
+            <h1>Game Library</h1>
+            <button type="button" class="create-btn" id="create-game-btn">
+                Create New Game
+            </button>
+        </header>
+
+        <!-- Loading Spinner -->
+        <div class="loading-spinner" id="loading-spinner" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading games...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="empty-state" style="display: none;">
+            <h2>No games found</h2>
+            <p>Click "Create New Game" to add your first game</p>
+        </div>
+
+        <!-- Game List -->
+        <div class="game-list" id="game-list"></div>
+
+        <!-- Toast Notification Container -->
+        <div class="toast-container" id="toast-container"></div>
+    </div>
+
+    <!-- Game Dialog (Create/Edit) -->
+    <dialog id="game-dialog" class="game-dialog">
+        <form method="dialog" class="dialog-content" id="game-form">
+            <header class="dialog-header">
+                <h2 id="dialog-title">Create New Game</h2>
+                <button type="button" class="close-btn" id="close-dialog-btn">&times;</button>
+            </header>
+
+            <div class="dialog-body">
+                <div class="form-group">
+                    <label for="game-title">Title <span class="required">*</span></label>
+                    <input type="text" id="game-title" name="title" required>
+                    <span class="error-text" data-field="title"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="game-release-date">Release Date <span class="required">*</span></label>
+                    <input type="date" id="game-release-date" name="release_date" required>
+                    <span class="error-text" data-field="release_date"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="game-genre">Genre <span class="required">*</span></label>
+                    <select id="game-genre" name="genre_id" required>
+                        <option value="">Select a genre</option>
+                    </select>
+                    <span class="error-text" data-field="genre_id"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Platforms <span class="required">*</span></label>
+                    <div class="checkbox-group" id="platforms-container">
+                        <!-- Platforms will be loaded dynamically -->
+                    </div>
+                    <span class="error-text" data-field="platform_ids"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="game-description">Description <span class="required">*</span></label>
+                    <textarea id="game-description" name="description" rows="6" required></textarea>
+                    <span class="error-text" data-field="description"></span>
+                </div>
+            </div>
+
+            <footer class="dialog-footer">
+                <button type="button" class="cancel-btn" id="cancel-dialog-btn">Cancel</button>
+                <button type="submit" class="submit-btn" id="submit-game-btn">Save</button>
+            </footer>
+        </form>
+    </dialog>
+
+    <!-- Delete Confirmation Dialog -->
+    <dialog id="delete-dialog" class="delete-dialog">
+        <div class="dialog-content">
+            <header class="dialog-header">
+                <h2>Confirm Delete</h2>
+            </header>
+
+            <div class="dialog-body">
+                <p>Are you sure you want to delete "<strong id="delete-game-title"></strong>"?</p>
+                <p class="warning-text">This action cannot be undone.</p>
+            </div>
+
+            <footer class="dialog-footer">
+                <button type="button" class="cancel-btn" id="cancel-delete-btn">Cancel</button>
+                <button type="button" class="delete-btn" id="confirm-delete-btn">Delete</button>
+            </footer>
+        </div>
+    </dialog>
+
+    <!-- JavaScript -->
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

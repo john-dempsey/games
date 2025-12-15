@@ -1,0 +1,106 @@
+/* Dialog Base Styles */
+dialog {
+    border: none;
+    border-radius: 8px;
+    padding: 0;
+    max-width: 700px;
+    width: 90%;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+dialog::backdrop {
+    background-color: rgba(0,0,0,0.5);
+}
+
+.dialog-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+}
+
+/* Dialog Header */
+.dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.dialog-header h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin: 0;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #999;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+/* Dialog Body */
+.dialog-body {
+    padding: 20px;
+    flex: 1;
+    overflow-y: auto;
+    max-height: calc(90vh - 200px);
+}
+
+/* Dialog Footer */
+.dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 20px;
+    border-top: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+}
+
+/* Game Dialog Specific */
+.game-dialog {
+    max-width: 700px;
+}
+
+/* Delete Dialog Specific */
+.delete-dialog {
+    max-width: 500px;
+}
+
+.delete-dialog .dialog-body p {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.delete-dialog .dialog-body p strong {
+    color: #dc3545;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    dialog {
+        width: 95%;
+        max-width: 95%;
+    }
+
+    .dialog-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .dialog-body {
+        max-height: calc(90vh - 180px);
+    }
+}
