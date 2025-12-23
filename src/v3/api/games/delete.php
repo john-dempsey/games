@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../etc/config.php';
+require_once __DIR__ . '/../../../etc/config.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
     JsonResponse::error("Invalid request method.", 405);

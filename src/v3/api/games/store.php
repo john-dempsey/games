@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../etc/config.php';
+require_once __DIR__ . '/../../../etc/config.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     JsonResponse::error("Invalid request method.", 405);
@@ -59,8 +59,13 @@ try {
                 GamePlatform::create($game->getGameId(), $platformId);
             }
         }
+
+        // Prepare response with platform_ids
+        $responseData = $game->toArray();
+        $responseData['platform_ids'] = $data['platform_ids'];
+
         // Success
-        JsonResponse::success($game->toArray(), 'Game created successfully', 201);
+        JsonResponse::success($responseData, 'Game created successfully', 201);
     }
     else {
         // Save failed

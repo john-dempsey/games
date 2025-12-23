@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../etc/config.php';
+require_once __DIR__ . '/../../../etc/config.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
     JsonResponse::error("Invalid request method.", 405);
@@ -93,8 +93,12 @@ try {
             }
         }
 
+        // Prepare response with platform_ids
+        $responseData = $game->toArray();
+        $responseData['platform_ids'] = $submittedPlatformIds;
+
         // Success
-        JsonResponse::success($game->toArray(), 'Game updated successfully', 200);
+        JsonResponse::success($responseData, 'Game updated successfully', 200);
     }
     else {
         // Save failed

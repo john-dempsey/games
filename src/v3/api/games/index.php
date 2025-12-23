@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/../../etc/config.php';
-
+require_once __DIR__ . '/../../../etc/config.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     JsonResponse::error("Invalid request method.", 405);
@@ -17,9 +16,11 @@ try {
         $gameData = $game->toArray();
         $gameData['genre'] = $game->getGenre() ? $game->getGenre()->getName() : null;
         $gameData['platforms'] = [];
+        $gameData['platform_ids'] = [];
         $platforms = $game->getPlatforms();
         foreach ($platforms as $platform) {
             $gameData['platforms'][] = $platform->getName();
+            $gameData['platform_ids'][] = $platform->getPlatformId();
         }
 
         $data[] = $gameData;

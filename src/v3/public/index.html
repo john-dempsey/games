@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Library - V3</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <div class="app-container">
@@ -11,7 +12,50 @@
         <header class="page-header">
             <h1>Game Library</h1>
         </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Master Panel (Game List) -->
+            <aside class="master-panel">
+                <!-- Filter Section -->
+                <div class="filter-section">
+                    <div class="filter-header">
+                        <h2>Filters</h2>
+                        <button id="filter-toggle" class="filter-toggle" aria-label="Toggle filters" aria-expanded="false">
+                            <svg class="filter-toggle-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="filters-container" class="filters-collapsed">
+                        <!-- Filters will be added here later -->
+                        <p class="filter-placeholder">Filtering options coming soon...</p>
+                    </div>
+                </div>
+
+                <!-- Game List -->
+                <div class="game-list-section">
+                    <div class="game-list-header">
+                        <h2>Games</h2>
+                        <span id="game-count" class="game-count">0 games</span>
+                    </div>
+                    <div id="game-list" class="game-list">
+                        <div class="loading">Loading games...</div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Detail Panel (Game Detail) -->
+            <section class="detail-panel">
+                <div id="game-detail" class="game-detail-container">
+                    <div class="detail-placeholder">
+                        <p>Select a game from the list to view details</p>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
+
     <!-- JavaScript -->
     <script type="module" src="js/app.js"></script>
 </body>
