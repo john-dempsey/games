@@ -28,6 +28,7 @@ CREATE TABLE Games (
     release_date DATE,
     genre_id INT,
     description TEXT,
+    image_filename VARCHAR(255),
     FOREIGN KEY (genre_id) REFERENCES Genres(genre_id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -66,22 +67,22 @@ INSERT INTO Platforms (name, manufacturer) VALUES
     ('Mobile', 'Various');
 
 -- Insert sample data into Games
-INSERT INTO Games (title, release_date, genre_id, description) VALUES
-    ('The Legend of Zelda: Tears of the Kingdom', '2023-05-12', 2, 'An epic adventure through the kingdom of Hyrule and the skies above.'),
-    ('Elden Ring', '2022-02-25', 3, 'A dark fantasy action RPG set in the Lands Between.'),
-    ('God of War Ragnarök', '2022-11-09', 1, 'Kratos and Atreus embark on a mythic journey for answers before Ragnarök arrives.'),
-    ('Resident Evil 4 Remake', '2023-03-24', 9, 'A remake of the survival horror classic with updated graphics and gameplay.'),
-    ('Street Fighter 6', '2023-06-02', 10, 'The latest installment in the legendary fighting game series.'),
-    ('Baldur''s Gate 3', '2023-08-03', 3, 'A story-rich, party-based RPG set in the Dungeons & Dragons universe.'),
-    ('Starfield', '2023-09-06', 3, 'An open-world space exploration RPG from Bethesda Game Studios.'),
-    ('Super Mario Bros. Wonder', '2023-10-20', 2, 'A new 2D platforming adventure featuring creative power-ups and transformations.'),
-    ('Alan Wake 2', '2023-10-27', 9, 'A psychological horror thriller that blurs the line between reality and fiction.'),
-    ('F1 2023', '2023-06-16', 8, 'The official game of the 2023 FIA Formula One World Championship.'),
-    ('Cities: Skylines II', '2023-10-24', 6, 'Build and manage the city of your dreams in this city-building simulation.'),
-    ('Portal 2', '2011-04-19', 7, 'A first-person puzzle-platform game featuring innovative portal mechanics.'),
-    ('Civilization VI', '2016-10-21', 4, 'Lead your civilization from the Stone Age to the Information Age.'),
-    ('The Sims 4', '2014-09-02', 6, 'Create and control people in a virtual world simulation.'),
-    ('FIFA 23', '2022-09-30', 5, 'The world''s most popular football simulation game.');
+INSERT INTO Games (title, release_date, genre_id, description, image_filename) VALUES
+    ('The Legend of Zelda: Tears of the Kingdom', '2023-05-12', 2, 'An epic adventure through the kingdom of Hyrule and the skies above.', 'The_Legend_of_Zelda_Tears_of_the_Kingdom.jpg'),
+    ('Elden Ring', '2022-02-25', 3, 'A dark fantasy action RPG set in the Lands Between.', 'Elden_Ring.jpg'),
+    ('God of War Ragnarök', '2022-11-09', 1, 'Kratos and Atreus embark on a mythic journey for answers before Ragnarök arrives.', 'God_of_War_Ragnarök.jpg'),
+    ('Resident Evil 4 Remake', '2023-03-24', 9, 'A remake of the survival horror classic with updated graphics and gameplay.', 'Resident_Evil_4_remake.jpg'),
+    ('Street Fighter 6', '2023-06-02', 10, 'The latest installment in the legendary fighting game series.', 'Street_Fighter_6.jpg'),
+    ('Baldur''s Gate 3', '2023-08-03', 3, 'A story-rich, party-based RPG set in the Dungeons & Dragons universe.', 'Baldur\'s_Gate_3.jpg'),
+    ('Starfield', '2023-09-06', 3, 'An open-world space exploration RPG from Bethesda Game Studios.', 'Starfield.jpg'),
+    ('Super Mario Bros. Wonder', '2023-10-20', 2, 'A new 2D platforming adventure featuring creative power-ups and transformations.', 'Mario_Wonder.png'),
+    ('Alan Wake 2', '2023-10-27', 9, 'A psychological horror thriller that blurs the line between reality and fiction.', 'Alan_Wake_2.jpg'),
+    ('F1 2023', '2023-06-16', 8, 'The official game of the 2023 FIA Formula One World Championship.', 'F1_23.jpg'),
+    ('Cities: Skylines II', '2023-10-24', 6, 'Build and manage the city of your dreams in this city-building simulation.', 'Cities_Skylines_II.png'),
+    ('Portal 2', '2011-04-19', 7, 'A first-person puzzle-platform game featuring innovative portal mechanics.', 'Portal_2.jpg'),
+    ('Civilization VI', '2016-10-21', 4, 'Lead your civilization from the Stone Age to the Information Age.', 'Civilization_VI.jpg'),
+    ('The Sims 4', '2014-09-02', 6, 'Create and control people in a virtual world simulation.', 'Sims_4.png'),
+    ('FIFA 23', '2022-09-30', 5, 'The world''s most popular football simulation game.', 'FIFA_23.jpg');
 
 -- Insert sample data into GamePlatforms (many-to-many relationship)
 INSERT INTO GamePlatforms (game_id, platform_id) VALUES
