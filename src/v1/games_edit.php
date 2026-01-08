@@ -70,7 +70,7 @@ catch (PDOException $e) {
                     </div>
                 <?php endif; ?>
 
-                <form action="games_update.php" method="POST">
+                <form action="games_update.php" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="game_id" value="<?php echo h($game->getGameId()); ?>">
 
                     <div class="form-group">
@@ -150,6 +150,27 @@ catch (PDOException $e) {
                         ><?php echo h(old('description', $game->getDescription())); ?></textarea>
                         <?php if (error('description')): ?>
                             <span class="error-text"><?php echo error('description'); ?></span>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Change Game Image (optional):</label>
+                        <?php if ($game->getImageFilename()): ?>
+                            <div style="margin-bottom: 10px;">
+                                <strong>Current image:</strong> <?php echo h($game->getImageFilename()); ?>
+                                <br>
+                                <img src="/images/<?php echo h($game->getImageFilename()); ?>" alt="Current game image" style="max-width: 230px; max-height: 107px; margin-top: 5px;">
+                            </div>
+                        <?php endif; ?>
+                        <input
+                            type="file"
+                            id="image"
+                            name="image"
+                            accept="image/jpeg,image/jpg,image/png"
+                        >
+                        <small>JPEG or PNG format. Image will be resized to 460x215 pixels. Max 5MB. Leave empty to keep current image.</small>
+                        <?php if (error('image')): ?>
+                            <span class="error-text"><?php echo error('image'); ?></span>
                         <?php endif; ?>
                     </div>
 

@@ -15,7 +15,8 @@ $data = [
     'release_date' => $_POST['release_date'] ?? null,
     'genre_id' => $_POST['genre_id'] ?? null,
     'description' => $_POST['description'] ?? null,
-    'platform_ids' => $_POST['platform_ids'] ?? []
+    'platform_ids' => $_POST['platform_ids'] ?? [],
+    'image' => $_FILES['image'] ?? null
 ];
 
 // Define validation rules
@@ -24,10 +25,11 @@ $rules = [
     'release_date' => 'required|notempty',
     'genre_id' => 'required|integer',
     'description' => 'required|notempty|min:10|max:5000',
-    'platform_ids' => 'required|array|min:1|max:10'
+    'platform_ids' => 'required|array|min:1|max:10',
+    'image' => 'required|file|mimes:jpg,jpeg,png|max_file_size:5242880|image'
 ];
 
-// Validate data
+// Validate all data (including file)
 $validator = new Validator($data, $rules);
 
 if ($validator->fails()) {
@@ -44,7 +46,7 @@ if ($validator->fails()) {
     redirect('games_create.php');
 }
 
-// Validation passed - create the game
+// All validation passed - now process and save
 try {
     // Verify genre exists
     $genre = Genre::findById($data['genre_id']);
@@ -54,12 +56,23 @@ try {
         redirect('games_create.php');
     }
 
+    // Process the uploaded image (validation already completed)
+    $imageUpload = new ImageUpload();
+    $imageFilename = $imageUpload->process($_FILES['image']);
+
+    if (!$imageFilename) {
+        $_SESSION['form-data'] = $data;
+        $_SESSION['form-errors'] = ['image' => 'Failed to process and save the image.'];
+        redirect('games_create.php');
+    }
+
     // Create new game instance
     $game = new Game();
     $game->setTitle($data['title']);
     $game->setReleaseDate($data['release_date']);
     $game->setGenreId($data['genre_id']);
     $game->setDescription($data['description']);
+    $game->setImageFilename($imageFilename);
 
     // Save to database
     if ($game->save()) {
@@ -80,15 +93,21 @@ try {
         redirect('games_show.php?id=' . $game->getGameId());
     }
     else {
-        // Save failed
+        // Save failed - clean up uploaded image
+        if ($imageFilename) {
+            $imageUpload->deleteImage($imageFilename);
+        }
         $_SESSION['form-data'] = $data;
         $_SESSION['form-errors'] = ['general' => 'Failed to create game. Please try again.'];
         redirect('games_create.php');
     }
 
-} 
+}
 catch (PDOException $e) {
-    // Database error
+    // Database error - clean up uploaded image
+    if (isset($imageFilename) && $imageFilename) {
+        $imageUpload->deleteImage($imageFilename);
+    }
     $_SESSION['form-data'] = $data;
     $_SESSION['form-errors'] = ['general' => 'Database error: ' . $e->getMessage()];
     redirect('games_create.php');

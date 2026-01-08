@@ -37,6 +37,9 @@ catch (PDOException $e) {
         <div class="game-list">
             <?php foreach ($games as $game): ?>
                 <div class="game-item">
+                    <?php if ($game->getImageFilename()): ?>
+                        <img src="/images/<?php echo h($game->getImageFilename()); ?>" alt="<?php echo h($game->getTitle()); ?>" class="game-image">
+                    <?php endif; ?>
                     <h2><?php echo h($game->getTitle()); ?></h2>
                     <p>Release Date: <?php echo h($game->getReleaseDate()); ?></p>
                     <p>Genre: <?php echo h($game->getGenre()->getName()); ?></p>

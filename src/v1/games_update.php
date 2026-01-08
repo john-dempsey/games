@@ -16,7 +16,8 @@ $data = [
     'release_date' => $_POST['release_date'] ?? null,
     'genre_id' => $_POST['genre_id'] ?? null,
     'description' => $_POST['description'] ?? null,
-    'platform_ids' => $_POST['platform_ids'] ?? []
+    'platform_ids' => $_POST['platform_ids'] ?? [],
+    'image' => $_FILES['image'] ?? null
 ];
 
 // Define validation rules
@@ -26,10 +27,11 @@ $rules = [
     'release_date' => 'required|notempty',
     'genre_id' => 'required|integer',
     'description' => 'required|notempty|min:10|max:5000',
-    'platform_ids' => 'required|array|min:1|max:10'
+    'platform_ids' => 'required|array|min:1|max:10',
+    'image' => 'file|mimes:jpg,jpeg,png|max_file_size:5242880|image'  // Optional - no 'required' rule
 ];
 
-// Validate data
+// Validate all data (including optional file)
 $validator = new Validator($data, $rules);
 
 if ($validator->fails()) {
@@ -46,7 +48,7 @@ if ($validator->fails()) {
     redirect('games_edit.php?id=' . $data['game_id']);
 }
 
-// Validation passed - update the game
+// All validation passed - update the game
 try {
     // Retrieve the game
     $game = Game::findById($data['game_id']);
@@ -63,6 +65,20 @@ try {
         $_SESSION['form-data'] = $data;
         $_SESSION['form-errors'] = ['genre_id' => 'Selected genre does not exist.'];
         redirect('games_edit.php?id=' . $data['game_id']);
+    }
+
+    // Handle optional image upload (validation already completed)
+    if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
+        $imageUpload = new ImageUpload();
+        $imageFilename = $imageUpload->process($_FILES['image'], $game->getImageFilename());
+
+        if (!$imageFilename) {
+            $_SESSION['form-data'] = $data;
+            $_SESSION['form-errors'] = ['image' => 'Failed to process and save the image.'];
+            redirect('games_edit.php?id=' . $data['game_id']);
+        }
+
+        $game->setImageFilename($imageFilename);
     }
 
     // Update game properties
@@ -109,7 +125,7 @@ try {
         redirect('games_edit.php?id=' . $data['game_id']);
     }
 
-} 
+}
 catch (PDOException $e) {
     // Database error
     $_SESSION['form-data'] = $data;

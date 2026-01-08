@@ -6,6 +6,7 @@ class Game {
     private $release_date;
     private $genre_id;
     private $description;
+    private $image_filename;
 
     private $db;
 
@@ -18,6 +19,7 @@ class Game {
             $this->release_date = $data['release_date'] ?? null;
             $this->genre_id = $data['genre_id'] ?? null;
             $this->description = $data['description'] ?? null;
+            $this->image_filename = $data['image_filename'] ?? null;
         }
     }
 
@@ -50,6 +52,10 @@ class Game {
         return Platform::findByGame($this->game_id);
     }
 
+    public function getImageFilename() {
+        return $this->image_filename;
+    }
+
     // Setters
     public function setTitle($title) {
         $this->title = $title;
@@ -65,6 +71,10 @@ class Game {
 
     public function setGenreId($genre_id) {
         $this->genre_id = $genre_id;
+    }
+
+    public function setImageFilename($image_filename) {
+        $this->image_filename = $image_filename;
     }
 
     // Find all games
@@ -138,7 +148,8 @@ class Game {
                 SET title = :title,
                     release_date = :release_date,
                     genre_id = :genre_id,
-                    description = :description
+                    description = :description,
+                    image_filename = :image_filename
                 WHERE game_id = :game_id
             ");
 
@@ -147,20 +158,22 @@ class Game {
                 'release_date' => $this->release_date,
                 'genre_id' => $this->genre_id,
                 'description' => $this->description,
+                'image_filename' => $this->image_filename,
                 'game_id' => $this->game_id
             ]);
         } else {
             // Insert new record
             $stmt = $this->db->prepare("
-                INSERT INTO Games (title, release_date, genre_id, description)
-                VALUES (:title, :release_date, :genre_id, :description)
+                INSERT INTO Games (title, release_date, genre_id, description, image_filename)
+                VALUES (:title, :release_date, :genre_id, :description, :image_filename)
             ");
 
             $result = $stmt->execute([
                 'title' => $this->title,
                 'release_date' => $this->release_date,
                 'genre_id' => $this->genre_id,
-                'description' => $this->description
+                'description' => $this->description,
+                'image_filename' => $this->image_filename
             ]);
 
             if ($result) {
@@ -188,7 +201,8 @@ class Game {
             'title' => $this->title,
             'release_date' => $this->release_date,
             'genre_id' => $this->genre_id,
-            'description' => $this->description
+            'description' => $this->description,
+            'image_filename' => $this->image_filename
         ];
     }
 }

@@ -96,6 +96,18 @@ class Validator {
             case 'subset':
                 $this->validateSubset($field, $value, $ruleValue);
                 break;
+            case 'file':
+                $this->validateFile($field, $value);
+                break;
+            case 'mimes':
+                $this->validateMimes($field, $value, $ruleValue);
+                break;
+            case 'max_file_size':
+                $this->validateMaxFileSize($field, $value, $ruleValue);
+                break;
+            case 'image':
+                $this->validateImage($field, $value);
+                break;
         }
     }
 
@@ -345,6 +357,135 @@ class Validator {
                 $this->addError($field, "All values in $field must be one of: $allowed.");
                 break;
             }
+        }
+    }
+
+    private function validateFile($field, $value) {
+        if ($value === null || $value === '') {
+            return;
+        }
+
+        // Check if value is a file upload array
+        if (!is_array($value) || !isset($value['error'])) {
+            $this->addError($field, "The $field must be a file.");
+            return;
+        }
+
+        // Check for upload errors (except UPLOAD_ERR_NO_FILE which means optional file not provided)
+        if ($value['error'] !== UPLOAD_ERR_OK && $value['error'] !== UPLOAD_ERR_NO_FILE) {
+            $this->addError($field, "File upload error: " . $this->getUploadErrorMessage($value['error']));
+        }
+    }
+
+    private function validateMimes($field, $value, $allowedMimes) {
+        if ($value === null || $value === '') {
+            return;
+        }
+
+        // Skip if no file was uploaded
+        if (!is_array($value) || !isset($value['tmp_name']) || $value['error'] === UPLOAD_ERR_NO_FILE) {
+            return;
+        }
+
+        // Check if file upload had errors
+        if ($value['error'] !== UPLOAD_ERR_OK) {
+            return; // Let the 'file' rule handle upload errors
+        }
+
+        // Get MIME type
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $value['tmp_name']);
+        finfo_close($finfo);
+
+        // Parse allowed MIME types
+        $allowedArray = explode(',', $allowedMimes);
+        $allowedArray = array_map('trim', $allowedArray);
+
+        // Convert extensions to MIME types
+        $mimeTypeMap = [
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'pdf' => 'application/pdf',
+            'doc' => 'application/msword',
+            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'txt' => 'text/plain'
+        ];
+
+        $allowedMimeTypes = [];
+        foreach ($allowedArray as $item) {
+            if (isset($mimeTypeMap[$item])) {
+                $allowedMimeTypes[] = $mimeTypeMap[$item];
+            } else {
+                $allowedMimeTypes[] = $item;
+            }
+        }
+
+        if (!in_array($mimeType, $allowedMimeTypes, true)) {
+            $allowed = implode(', ', $allowedArray);
+            $this->addError($field, "The $field must be a file of type: $allowed.");
+        }
+    }
+
+    private function validateMaxFileSize($field, $value, $maxSize) {
+        if ($value === null || $value === '') {
+            return;
+        }
+
+        // Skip if no file was uploaded
+        if (!is_array($value) || !isset($value['size']) || $value['error'] === UPLOAD_ERR_NO_FILE) {
+            return;
+        }
+
+        // Check if file upload had errors
+        if ($value['error'] !== UPLOAD_ERR_OK) {
+            return; // Let the 'file' rule handle upload errors
+        }
+
+        if ($value['size'] > $maxSize) {
+            $maxSizeMB = round($maxSize / 1048576, 2);
+            $this->addError($field, "The $field must not exceed $maxSizeMB MB.");
+        }
+    }
+
+    private function validateImage($field, $value) {
+        if ($value === null || $value === '') {
+            return;
+        }
+
+        // Skip if no file was uploaded
+        if (!is_array($value) || !isset($value['tmp_name']) || $value['error'] === UPLOAD_ERR_NO_FILE) {
+            return;
+        }
+
+        // Check if file upload had errors
+        if ($value['error'] !== UPLOAD_ERR_OK) {
+            return; // Let the 'file' rule handle upload errors
+        }
+
+        // Validate that file is an image
+        $imageInfo = getimagesize($value['tmp_name']);
+        if ($imageInfo === false) {
+            $this->addError($field, "The $field must be a valid image.");
+        }
+    }
+
+    private function getUploadErrorMessage($errorCode) {
+        switch ($errorCode) {
+            case UPLOAD_ERR_INI_SIZE:
+            case UPLOAD_ERR_FORM_SIZE:
+                return "File is too large.";
+            case UPLOAD_ERR_PARTIAL:
+                return "File was only partially uploaded.";
+            case UPLOAD_ERR_NO_TMP_DIR:
+                return "Missing temporary folder.";
+            case UPLOAD_ERR_CANT_WRITE:
+                return "Failed to write file to disk.";
+            case UPLOAD_ERR_EXTENSION:
+                return "Upload stopped by extension.";
+            default:
+                return "Unknown upload error.";
         }
     }
 

@@ -43,7 +43,7 @@ catch (PDOException $e) {
                     </div>
                 <?php endif; ?>
 
-                <form action="games_store.php" method="POST">
+                <form action="games_store.php" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="title">Title:</label>
                         <input
@@ -117,6 +117,20 @@ catch (PDOException $e) {
                         ><?php echo h(old('description')); ?></textarea>
                         <?php if (error('description')): ?>
                             <span class="error-text"><?php echo error('description'); ?></span>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Game Image (required):</label>
+                        <input
+                            type="file"
+                            id="image"
+                            name="image"
+                            accept="image/jpeg,image/jpg,image/png"
+                        >
+                        <small>JPEG or PNG format. Image will be resized to 460x215 pixels. Max 5MB.</small>
+                        <?php if (error('image')): ?>
+                            <span class="error-text"><?php echo error('image'); ?></span>
                         <?php endif; ?>
                     </div>
 

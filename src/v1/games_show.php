@@ -47,6 +47,12 @@ if (isset($_GET['id'])) {
             <div class="game-details">
                 <h1><?php echo h($game->getTitle()); ?></h1>
 
+                <?php if ($game->getImageFilename()): ?>
+                    <div class="game-image-container">
+                        <img src="/images/<?php echo h($game->getImageFilename()); ?>" alt="<?php echo h($game->getTitle()); ?>" class="game-detail-image">
+                    </div>
+                <?php endif; ?>
+
                 <div class="game-info">
                     <div class="info-item">
                         <span class="info-label">Game ID:</span>
