@@ -70,7 +70,7 @@ INSERT INTO Platforms (name, manufacturer) VALUES
 INSERT INTO Games (title, release_date, genre_id, description, image_filename) VALUES
     ('The Legend of Zelda: Tears of the Kingdom', '2023-05-12', 2, 'An epic adventure through the kingdom of Hyrule and the skies above.', 'The_Legend_of_Zelda_Tears_of_the_Kingdom.jpg'),
     ('Elden Ring', '2022-02-25', 3, 'A dark fantasy action RPG set in the Lands Between.', 'Elden_Ring.jpg'),
-    ('God of War Ragnarök', '2022-11-09', 1, 'Kratos and Atreus embark on a mythic journey for answers before Ragnarök arrives.', 'God_of_War_Ragnarök.jpg'),
+    ('God of War Ragnarok', '2022-11-09', 1, 'Kratos and Atreus embark on a mythic journey for answers before Ragnarok arrives.', 'God_of_War_Ragnarok.jpg'),
     ('Resident Evil 4 Remake', '2023-03-24', 9, 'A remake of the survival horror classic with updated graphics and gameplay.', 'Resident_Evil_4_remake.jpg'),
     ('Street Fighter 6', '2023-06-02', 10, 'The latest installment in the legendary fighting game series.', 'Street_Fighter_6.jpg'),
     ('Baldur''s Gate 3', '2023-08-03', 3, 'A story-rich, party-based RPG set in the Dungeons & Dragons universe.', 'Baldur\'s_Gate_3.jpg'),
@@ -96,7 +96,7 @@ INSERT INTO GamePlatforms (game_id, platform_id) VALUES
     (2, 4),  -- Xbox Series X
     (2, 5),  -- Xbox One
 
-    -- God of War Ragnarök (game_id: 3)
+    -- God of War Ragnarok (game_id: 3)
     (3, 2),  -- PS5
     (3, 3),  -- PS4
 
